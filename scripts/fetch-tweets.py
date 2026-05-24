@@ -89,6 +89,15 @@ def filter_originals(tweets: list[dict], handle: str) -> list[dict]:
         if t.get("in_reply_to_status_id_str"):
             continue                                # reply
         keep.append(t)
+    # Strict newest-first by created_at. Syndication returns pinned tweet first
+    # and then engagement-weighted order — overriding that so the rail shows
+    # the actual most-recent tweets first.
+    def ts(t):
+        try:
+            return dt.datetime.strptime(t["created_at"], "%a %b %d %H:%M:%S %z %Y")
+        except ValueError:
+            return dt.datetime.min.replace(tzinfo=dt.timezone.utc)
+    keep.sort(key=ts, reverse=True)
     return keep
 
 
@@ -119,7 +128,10 @@ def to_record(t: dict) -> dict:
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--handle", default="ai")
-    p.add_argument("--limit", type=int, default=12)
+    p.add_argument(
+        "--limit", type=int, default=50,
+        help="max tweets to keep; 0 = no limit (use every original we can parse)",
+    )
     p.add_argument(
         "--out",
         default=str(pathlib.Path(__file__).resolve().parent.parent / "data" / "tweets.json"),
@@ -137,9 +149,9 @@ def main() -> int:
         return 0
 
     raw = extract_tweets(html)
-    originals = filter_originals(raw, args.handle)
-    # syndication returns newest-first already; preserve that order.
-    records = [to_record(t) for t in originals[: args.limit]]
+    originals = filter_originals(raw, args.handle)  # already sorted newest-first
+    sliced = originals if args.limit == 0 else originals[: args.limit]
+    records = [to_record(t) for t in sliced]
 
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     with open(args.out, "w") as f:

@@ -22,7 +22,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Fetch tweets
-        run: python3 scripts/fetch-tweets.py --handle ai --limit 12
+        # --limit 0 = every original we can parse from syndication (~80-100).
+        run: python3 scripts/fetch-tweets.py --handle ai --limit 0
 
       - name: Commit if changed
         run: |
