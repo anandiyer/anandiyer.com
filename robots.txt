@@ -1,0 +1,32 @@
+# anandiyer.com — allow all reputable crawlers, including LLM bots.
+# (GEO: explicit allow-by-name is friendlier than relying on Allow: *.)
+
+User-agent: *
+Allow: /
+
+# LLM crawlers — explicitly invited
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://anandiyer.com/sitemap.xml

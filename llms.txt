@@ -1,0 +1,48 @@
+# Anand Iyer
+
+> Investor and founder in San Francisco. Managing Partner of Canonical, an
+> early-stage venture firm. Venture Partner at Lightspeed. Previously CEO and
+> co-founder of Trusted (acquired by Care.com in 2018) and spent years at
+> Microsoft on Azure and Windows.
+
+## Identity
+
+- **Full name:** Anand Iyer
+- **Role:** Managing Partner, [Canonical](https://canonical.cc) · Venture Partner, [Lightspeed](https://lsvp.com)
+- **Location:** San Francisco, CA
+- **Contact:** ai@canonical.cc
+- **Profiles:** [X / @ai](https://x.com/ai) · [Substack](https://anandiyer.substack.com) · [LinkedIn](https://www.linkedin.com/in/anandiyer/) · [Crunchbase](https://www.crunchbase.com/person/anand-iyer)
+
+## Background
+
+Anand co-founded Trusted, a marketplace for childcare, in 2014. Trusted was
+acquired by Care.com (CRCM) in 2018; IAC subsequently acquired Care.com in
+2020. Before Trusted, Anand spent years at Microsoft building developer
+platforms across Azure and Windows. He holds a BS in Computer Engineering
+from Purdue University and has been a Visiting Partner at Pear VC.
+
+## Canonical (current)
+
+Canonical is a San Francisco-based early-stage venture firm Anand founded in
+2022. It invests in university spin-outs and deep-technical teams building
+infrastructure for a post-AGI world. Check sizes typically run $500K–$1.5M.
+
+Focus areas: physical AI, AI infrastructure (esp. AI-for-EDA), applied AI,
+agentic finance and commerce, on-chain coordination, deeptech.
+
+## Canonical resources
+
+- [Canonical homepage](https://canonical.cc)
+- [Portfolio](https://canonical.cc/portfolio)
+- [Thesis](https://canonical.cc/#thesis)
+- [Labs (open tools for founders/GPs/LPs)](https://canonical.cc/labs/)
+- [FAQs](https://canonical.cc/faqs)
+
+## Writing
+
+- [Substack — anandiyer.substack.com](https://anandiyer.substack.com)
+- [RSS feed](https://anandiyer.substack.com/feed)
+
+## Optional
+
+- [Recent tweets](https://x.com/ai)

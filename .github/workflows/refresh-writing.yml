@@ -1,0 +1,39 @@
+name: Refresh writing
+
+# Hourly fetch of latest Substack posts.
+# Updates both data/writing.json AND patches the inline HTML block in
+# index.html between the <!-- writing:start --> / <!-- writing:end --> markers
+# (inline HTML so essay titles land in the initial page for SEO and LLM crawlers).
+
+on:
+  schedule:
+    - cron: "23 * * * *"        # off-peak vs the :17 tweets cron
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-writing
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Substack feed
+        run: python3 scripts/fetch-substack.py --limit 5
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/writing.json index.html; then
+            echo "no change — skipping commit"
+            exit 0
+          fi
+          git config user.name  "writing-refresh-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/writing.json index.html
+          git commit -m "chore(writing): refresh from Substack [skip ci]"
+          git push

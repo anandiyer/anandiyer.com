@@ -1,0 +1,234 @@
+/* anandiyer.com — Collison-style personal page */
+
+:root {
+  --bg: #fbfaf7;
+  --ink: #1a1a1a;
+  --muted: #6b6b66;
+  --rule: #e5e3dc;
+  --accent: #1f3a8a;
+  --serif: "Charter", "Source Serif 4", "Iowan Old Style", "Apple Garamond",
+    "Baskerville", "Times New Roman", "Droid Serif", Times, serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  --reading: 640px;
+  --rail: 720px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.6;
+  font-feature-settings: "kern", "liga", "onum";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.wrap {
+  max-width: var(--reading);
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 4rem;
+}
+
+.wrap--wide { max-width: var(--rail); }
+
+/* ── Header ────────────────────────────────────────────── */
+header.site {
+  max-width: var(--rail);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.95rem;
+}
+header.site .name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+header.site nav a {
+  margin-left: 1.5rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+header.site nav a:hover { color: var(--ink); }
+
+/* ── Hero ──────────────────────────────────────────────── */
+.hero {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+.hero h1 {
+  font-size: 2.6rem;
+  line-height: 1.1;
+  margin: 0 0 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.hero .lede {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ── Prose ─────────────────────────────────────────────── */
+p { margin: 0 0 1.1rem; }
+
+a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.15s;
+}
+a:hover { text-decoration-color: var(--accent); }
+
+/* ── Sections ──────────────────────────────────────────── */
+section { margin-top: 3rem; }
+
+.label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+
+/* ── Lists (writing, talks) ────────────────────────────── */
+.list { list-style: none; padding: 0; margin: 0; }
+.list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.list li:last-child { border-bottom: none; }
+.list .title { flex: 1; }
+.list .meta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Tweet rail ────────────────────────────────────────── */
+.rail-wrap {
+  margin: 0 -1.5rem;            /* break out of reading width edges */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.rail {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 1.5rem 1.5rem;
+}
+.tweet {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1.1rem 1.2rem 0.9rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.tweet:hover {
+  border-color: #c9c6bc;
+  transform: translateY(-1px);
+}
+.tweet .text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  flex: 1;
+}
+.tweet .foot {
+  margin-top: 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ── FAQ (details/summary) ─────────────────────────────── */
+#faq details {
+  border-bottom: 1px solid var(--rule);
+  padding: 1rem 0;
+}
+#faq details:first-of-type { border-top: 1px solid var(--rule); }
+#faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#faq summary::-webkit-details-marker { display: none; }
+#faq summary::after {
+  content: "+";
+  font-family: var(--mono);
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+#faq details[open] summary::after { content: "−"; }
+#faq details p {
+  margin-top: 0.85rem;
+  color: var(--ink);
+}
+
+/* ── Contact ───────────────────────────────────────────── */
+.contact a { font-weight: 600; }
+
+footer.site {
+  max-width: var(--rail);
+  margin: 3.5rem auto 2.5rem;
+  padding: 1.5rem 1.5rem 0;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+}
+footer.site a { color: var(--muted); }
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 600px) {
+  body { font-size: 18px; }
+  .wrap { padding: 2rem 1.25rem 2.5rem; }
+  header.site { padding: 1.5rem 1.25rem 0; }
+  .hero { margin-top: 1.5rem; margin-bottom: 1.75rem; }
+  .hero h1 { font-size: 2.1rem; }
+  .hero .lede { font-size: 1.1rem; }
+  section { margin-top: 2.25rem; }
+  .rail-wrap { margin: 0 -1.25rem; }
+  .rail { padding: 0.25rem 1.25rem 1.5rem; }
+  footer.site { flex-direction: column; gap: 0.5rem; padding: 1.5rem 1.25rem 0; }
+}

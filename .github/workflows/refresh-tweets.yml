@@ -1,0 +1,37 @@
+name: Refresh tweets
+
+# Hourly cron fetch of @ai's recent originals into data/tweets.json.
+# Commits only when the JSON actually changed, so the git history stays clean.
+
+on:
+  schedule:
+    - cron: "17 * * * *"        # :17 past every hour (off-peak vs github's :00 spike)
+  workflow_dispatch:            # let us trigger manually too
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-tweets
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch tweets
+        run: python3 scripts/fetch-tweets.py --handle ai --limit 12
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/tweets.json; then
+            echo "no change — skipping commit"
+            exit 0
+          fi
+          git config user.name  "tweet-refresh-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/tweets.json
+          git commit -m "chore(tweets): refresh from syndication [skip ci]"
+          git push
