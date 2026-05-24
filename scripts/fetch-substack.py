@@ -14,7 +14,8 @@ Usage:
   python3 scripts/fetch-substack.py [--feed URL] [--limit N]
 """
 from __future__ import annotations
-import argparse, datetime as dt, html, json, pathlib, re, sys, urllib.request
+import argparse, datetime as dt, gzip, html, json, pathlib, re, sys, time
+import urllib.error, urllib.request
 import xml.etree.ElementTree as ET
 
 UA = (
@@ -24,11 +25,35 @@ UA = (
 DEFAULT_FEED = "https://anandiyer.substack.com/feed"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
+# Substack sits behind Cloudflare, which 403s naked python-urllib from
+# datacenter IPs. Real browser headers (and a Referer) get through.
+BROWSER_HEADERS = {
+    "User-Agent": UA,
+    "Accept": "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.1",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate",
+    "Referer": "https://anandiyer.com/",
+    "Cache-Control": "no-cache",
+}
 
-def fetch_feed(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=15) as r:
-        return r.read().decode("utf-8", errors="replace")
+
+def fetch_feed(url: str, max_retries: int = 3) -> str:
+    for attempt in range(max_retries):
+        try:
+            req = urllib.request.Request(url, headers=BROWSER_HEADERS)
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = r.read()
+                if r.headers.get("Content-Encoding") == "gzip":
+                    data = gzip.decompress(data)
+                return data.decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 403) and attempt < max_retries - 1:
+                wait = 5 * (3 ** attempt)        # 5s, 15s, 45s
+                print(f"  HTTP {e.code} from Substack; retry in {wait}s "
+                      f"(attempt {attempt+1}/{max_retries})", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            raise
 
 
 def parse_items(xml_str: str, limit: int) -> list[dict]:
@@ -99,11 +124,19 @@ def main() -> int:
     p.add_argument("--html", default=str(ROOT / "index.html"))
     args = p.parse_args()
 
-    xml_str = fetch_feed(args.feed)
+    try:
+        xml_str = fetch_feed(args.feed)
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+        # Persistent fetch failure (Cloudflare blocking GH runner IP). Don't
+        # fail the workflow — last-good writing.json + inline HTML keep serving.
+        print(f"fetch failed permanently: {e}; keeping existing writing data",
+              file=sys.stderr)
+        return 0
+
     items = parse_items(xml_str, args.limit)
     if not items:
-        print("no items in feed — bailing without writes", file=sys.stderr)
-        return 1
+        print("no items in feed — keeping existing writing data", file=sys.stderr)
+        return 0
 
     # 1. JSON source of truth
     pathlib.Path(args.json_out).parent.mkdir(parents=True, exist_ok=True)

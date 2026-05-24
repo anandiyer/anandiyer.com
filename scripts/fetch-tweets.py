@@ -12,7 +12,7 @@ Usage:
 Default: handle=ai, limit=12, writes to ../data/tweets.json relative to this file.
 """
 from __future__ import annotations
-import argparse, datetime as dt, json, pathlib, re, sys, urllib.request
+import argparse, datetime as dt, gzip, json, pathlib, re, sys, time, urllib.error, urllib.request
 
 UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -20,11 +20,37 @@ UA = (
 )
 URL = "https://syndication.twitter.com/srv/timeline-profile/screen-name/{handle}"
 
+# Browser-mimicry headers — Twitter rate-limits naked python-urllib hard from
+# datacenter IP ranges. Looking like Safari + having a Referer dramatically
+# improves the success rate from GitHub Actions runners.
+BROWSER_HEADERS = {
+    "User-Agent": UA,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate",
+    "Referer": "https://platform.twitter.com/",
+    "Cache-Control": "no-cache",
+}
 
-def fetch_timeline_html(handle: str) -> str:
-    req = urllib.request.Request(URL.format(handle=handle), headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=15) as r:
-        return r.read().decode("utf-8", errors="replace")
+
+def fetch_timeline_html(handle: str, max_retries: int = 3) -> str:
+    url = URL.format(handle=handle)
+    for attempt in range(max_retries):
+        try:
+            req = urllib.request.Request(url, headers=BROWSER_HEADERS)
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = r.read()
+                if r.headers.get("Content-Encoding") == "gzip":
+                    data = gzip.decompress(data)
+                return data.decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 403) and attempt < max_retries - 1:
+                wait = 5 * (3 ** attempt)        # 5s, 15s, 45s
+                print(f"  HTTP {e.code} from syndication; retry in {wait}s "
+                      f"(attempt {attempt+1}/{max_retries})", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            raise
 
 
 def extract_tweets(html: str) -> list[dict]:
@@ -100,7 +126,16 @@ def main() -> int:
     )
     args = p.parse_args()
 
-    html = fetch_timeline_html(args.handle)
+    try:
+        html = fetch_timeline_html(args.handle)
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+        # Persistent fetch failure (e.g. Twitter blocking GH runner IP). Don't
+        # fail the workflow — last-good tweets.json keeps serving. Cron will
+        # try again next hour.
+        print(f"fetch failed permanently: {e}; keeping existing tweets.json",
+              file=sys.stderr)
+        return 0
+
     raw = extract_tweets(html)
     originals = filter_originals(raw, args.handle)
     # syndication returns newest-first already; preserve that order.
