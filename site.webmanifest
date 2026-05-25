@@ -1,0 +1,23 @@
+{
+  "name": "Anand Iyer",
+  "short_name": "Anand Iyer",
+  "description": "Anand Iyer — investor and founder. Managing Partner at Canonical.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#fbfaf7",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "/images/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
