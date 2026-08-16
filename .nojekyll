@@ -1,0 +1,6 @@
+# Disable Jekyll on GitHub Pages. This repo uses no Jekyll features — no front
+# matter, no _layouts, no _includes — and Pages should copy files verbatim.
+#
+# Specifically: /index.md is a Markdown twin of the homepage, served as-is for
+# agents that request Markdown (see <link rel="alternate"> in index.html).
+# Without this file, Jekyll could render it to HTML and collide with index.html.

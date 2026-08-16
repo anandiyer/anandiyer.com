@@ -1,7 +1,20 @@
 # anandiyer.com — allow all reputable crawlers, including LLM bots.
 # (GEO: explicit allow-by-name is friendlier than relying on Allow: *.)
+#
+# Content Signals state how this content may be used, rather than leaving each
+# crawler to infer it. See https://contentsignals.org for the specification.
+#   search   = building a search index and returning links/short excerpts
+#   ai-input = using the content to ground a generated answer (RAG)
+#   ai-train = training or fine-tuning a model
+#
+# ai-train=yes is deliberate and matches the allow-list below, which already
+# invites the training crawlers by name (CCBot, Google-Extended,
+# Applebot-Extended). Note this is the opposite of canonical.cc's stance, which
+# sets ai-train=no. Flip this line to `no` and drop those three from the
+# allow-list if the two sites should agree.
 
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 # LLM crawlers — explicitly invited

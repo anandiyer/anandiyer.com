@@ -94,3 +94,61 @@ anand-site/
 - Talks/press section is still placeholder; consider removing if no real items to feature.
 - Could add a small "Speaking" section (events Anand is speaking at) if relevant.
 - Consider adding `last-modified` headers via CF page rule to help Google freshness signal.
+
+---
+
+# AEO readiness pass — 2026-08-16
+
+Applied the [Canonical AEO Readiness Check](https://canonical.cc/labs/aeo/?d=anandiyer.com)
+fix plan (scan of 2026-08-13, scored **57/100 · Grade C**).
+
+## Done
+
+- [x] **Task 2 — Service schema.** Added `Service` JSON-LD (`#investing`) describing
+      pre-seed/seed investing. No `offers` block: a check size is not a published
+      price, and the plan forbids inventing one. `provider` lists the Person first,
+      then the Canonical Organization, so the node anchors to this domain.
+- [x] **Task 3 — Question headings.** The section eyebrows were `<span class="label">`,
+      so the scan saw *zero* headings. Converted to `<h2 class="label">` phrased as
+      questions, and wrapped each FAQ `<summary>` in `<h3>`. Now 10 of 11 headings
+      are questions (0% → 91%), with exactly one `<h1>`. `.label` out-specifies the
+      bare `h2` rule, so rendering is byte-identical to before.
+- [x] **Task 4 — Meta description.** Was 233 chars (outside the 50–200 window, which
+      scores as absent). Rewrote to 178.
+- [x] **Task 5 — Markdown twin.** Added `/index.md` + `<link rel="alternate"
+      type="text/markdown">`. Added `.nojekyll` so Pages serves the `.md` verbatim
+      instead of rendering it into a file that collides with `index.html`.
+      `fetch-substack.py` now patches the writing block in *both* files, and the
+      workflow commits both — a twin that drifts is worse than no twin.
+- [x] **Task 6 — Content Signals.** Added `Content-Signal:` to `robots.txt`.
+- [x] **Smaller gaps.** `<time datetime>` on every writing/talk date (machine-readable
+      pubdates); fact table in the Now section (engines lift tables wholesale, and it
+      targets the check-size question no engine currently answers).
+
+## Deliberately skipped
+
+- **Task 1 — comparison/alternatives page.** Belongs on canonical.cc, not a personal
+  bio page. This is the single biggest scorer (+5) and the one question where 4/4
+  engines already name the brand — worth doing there.
+- **Task 7 — MCP endpoint.** GitHub Pages cannot host one: every MCP transport needs
+  JSON-RPC over POST, and Pages returns 405. A descriptor pointing at nothing is
+  worse than none (the plan says so). If wanted, host the server as a Cloudflare
+  Worker — canonical.cc already runs that pattern — and point a descriptor at it.
+
+## Needs a human decision
+
+- **`ai-train` stance.** `robots.txt` here explicitly *invites* the training crawlers
+  by name (CCBot, Google-Extended, Applebot-Extended), so Content-Signal is set to
+  `ai-train=yes` to match rather than silently reversing that choice. **This is the
+  opposite of canonical.cc, which sets `ai-train=no`.** Pick one and make them agree.
+- **Stale README.** README says Pages serves the `master` branch. It serves `main`
+  (verified: live bytes == `origin/main`). Left as-is — out of scope for this pass.
+
+## Verification
+
+- All 4 JSON-LD blocks parse; still to paste into <https://validator.schema.org/>.
+- HTML re-parsed: no unclosed or mismatched tags.
+- `fetch-substack.py` is idempotent against both `index.html` and `index.md` — the
+  committed state already equals what the next cron run produces, so no churn.
+- Rendered in headless Chrome at desktop and at a 342px content width: eyebrow
+  styling unchanged, table wraps without overflow.

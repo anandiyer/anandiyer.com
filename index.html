@@ -6,10 +6,17 @@
 
   <!-- Entity SEO: title matches the query, modifier states the role -->
   <title>Anand Iyer — Investor and Founder</title>
-  <meta name="description" content="Anand Iyer is Managing Partner at Canonical, an early-stage venture firm in San Francisco, and Venture Partner at Lightspeed. Previously co-founder and CEO of Trusted (acquired 2018) and spent years at Microsoft on Azure and Windows." />
+  <!-- Keep this between 50 and 200 characters — answer engines and SERPs both
+       truncate past that, and a description outside the window scores as absent. -->
+  <meta name="description" content="Anand Iyer is Managing Partner at Canonical, an early-stage venture firm in San Francisco, and Venture Partner at Lightspeed. He co-founded Trusted, acquired by Care.com in 2018." />
   <meta name="author" content="Anand Iyer" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="https://anandiyer.com/" />
+
+  <!-- Markdown twin of this page. Agents that accept Markdown parse it far more
+       reliably than rendered HTML. The writing list in /index.md is patched by
+       the same cron that patches this file, so the two can't drift. -->
+  <link rel="alternate" type="text/markdown" href="/index.md" title="Anand Iyer — Markdown" />
 
   <!-- Open Graph (Facebook, LinkedIn, Slack, iMessage, Discord — anything that uses OG) -->
   <meta property="og:type" content="profile" />
@@ -104,6 +111,42 @@
   }
   </script>
 
+  <!-- Service schema: the machine-readable answer to "what does he actually do
+       for founders". No `offers` block — a check size is not a published price,
+       and inventing one would be worse than omitting it. Every value below is
+       copy that already appears on this page. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": "https://anandiyer.com/#investing",
+    "name": "Pre-seed and early-stage venture investment",
+    "serviceType": "Venture capital investment",
+    "url": "https://anandiyer.com/",
+    "description": "Anand Iyer invests at pre-seed and seed through Canonical, leading rounds in university spin-outs and deep-technical teams building infrastructure for a post-AGI world. Check sizes typically run $500K–$1.5M at the earliest stages.",
+    "provider": [
+      { "@id": "https://anandiyer.com/#person" },
+      { "@id": "https://canonical.cc/#org" }
+    ],
+    "areaServed": { "@type": "Place", "name": "San Francisco Bay Area" },
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Founders raising a pre-seed or seed round"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Investment focus areas",
+      "itemListElement": [
+        { "@type": "Service", "name": "Physical AI and robotics" },
+        { "@type": "Service", "name": "AI infrastructure" },
+        { "@type": "Service", "name": "Applied AI" },
+        { "@type": "Service", "name": "Agentic finance and commerce" },
+        { "@type": "Service", "name": "On-chain coordination" }
+      ]
+    }
+  }
+  </script>
+
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
@@ -111,7 +154,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <link rel="stylesheet" href="/css/style.css?v=20260525a" />
+  <link rel="stylesheet" href="/css/style.css?v=20260816a" />
 </head>
 <body>
 
@@ -140,13 +183,30 @@
 
   <!-- ── Now ──────────────────────────────────────────── -->
   <section id="now">
-    <span class="label">Now</span>
+    <h2 class="label">What is Anand Iyer working on now?</h2>
     <p>
       At Canonical, Anand leads investments in university spin-outs and
       deep-technical teams across physical AI, AI infrastructure, applied AI,
       agentic finance and commerce, and on-chain coordination. Check sizes
       typically run $500K–$1.5M at the earliest stages.
     </p>
+
+    <!-- Engines lift tables wholesale into answers. Every cell restates a fact
+         already in the prose above — the table is a machine-readable shape for
+         it, not new claims. -->
+    <table class="facts">
+      <caption>What Anand Iyer invests in</caption>
+      <tbody>
+        <tr><th scope="row">Stage</th><td>Pre-seed and seed — leads at the earliest stages</td></tr>
+        <tr><th scope="row">Check size</th><td>$500K–$1.5M</td></tr>
+        <tr><th scope="row">Focus</th><td>Physical AI, AI infrastructure, applied AI, agentic finance and commerce, on-chain coordination</td></tr>
+        <tr><th scope="row">Teams</th><td>University spin-outs and deep-technical founders</td></tr>
+        <tr><th scope="row">Based in</th><td>San Francisco, CA</td></tr>
+        <tr><th scope="row">Firm</th><td><a href="https://canonical.cc">Canonical</a>, founded 2022</td></tr>
+        <tr><th scope="row">Pitches</th><td><a href="mailto:hello@canonical.cc">hello@canonical.cc</a></td></tr>
+      </tbody>
+    </table>
+
     <p>
       Previously, Anand was CEO and co-founder of
       <a href="https://en.wikipedia.org/wiki/Trusted_(company)">Trusted</a>, a
@@ -161,29 +221,29 @@
 
   <!-- ── Writing — auto-patched from Substack RSS by scripts/fetch-substack.py ─ -->
   <section id="writing">
-    <span class="label">Writing &nbsp;→&nbsp; <a href="https://anandiyer.substack.com">anandiyer.substack.com</a></span>
+    <h2 class="label">What does Anand Iyer write about? &nbsp;→&nbsp; <a href="https://anandiyer.substack.com">anandiyer.substack.com</a></h2>
     <ul class="list">
       <!-- writing:start -->
   <!-- (auto-generated by scripts/fetch-substack.py — don't edit by hand) -->
   <li>
     <span class="title"><a href="https://anandiyer.substack.com/p/agents-cant-transact" target="_blank" rel="noopener">Agents Can&#x27;t Transact</a></span>
-    <span class="meta">May 22, 2026</span>
+    <span class="meta"><time datetime="2026-05-22">May 22, 2026</time></span>
   </li>
   <li>
     <span class="title"><a href="https://anandiyer.substack.com/p/power-law-lab-venture-fund-simulator" target="_blank" rel="noopener">Power Law Lab - Venture Fund Simulator</a></span>
-    <span class="meta">May 20, 2026</span>
+    <span class="meta"><time datetime="2026-05-20">May 20, 2026</time></span>
   </li>
   <li>
     <span class="title"><a href="https://anandiyer.substack.com/p/the-gap-is-hands-why-we-invested-in-robo-robotics" target="_blank" rel="noopener">The Gap Is Hands: Why We Invested in Robo and the Future of Physical AI</a></span>
-    <span class="meta">May 18, 2026</span>
+    <span class="meta"><time datetime="2026-05-18">May 18, 2026</time></span>
   </li>
   <li>
     <span class="title"><a href="https://anandiyer.substack.com/p/vibe-coding-safes" target="_blank" rel="noopener">Vibe coding SAFEs</a></span>
-    <span class="meta">May 15, 2026</span>
+    <span class="meta"><time datetime="2026-05-15">May 15, 2026</time></span>
   </li>
   <li>
     <span class="title"><a href="https://anandiyer.substack.com/p/the-agentic-economy" target="_blank" rel="noopener">The Agentic Economy</a></span>
-    <span class="meta">May 8, 2026</span>
+    <span class="meta"><time datetime="2026-05-08">May 8, 2026</time></span>
   </li>
   <!-- writing:end -->
     </ul>
@@ -191,21 +251,21 @@
 
   <!-- ── Talks & press (inlined HTML) ─────────────────── -->
   <section id="talks">
-    <span class="label">Talks &amp; press</span>
+    <h2 class="label">Where has Anand Iyer spoken?</h2>
     <ul class="list">
       <li>
         <span class="title">
           <a href="https://www.youtube.com/watch?v=m1XPUyTokaQ" target="_blank" rel="noopener">On the Record with John D&rsquo;Agostino</a>
           <span style="color:var(--muted)"> · Coinbase</span>
         </span>
-        <span class="meta">Dec 2025</span>
+        <span class="meta"><time datetime="2025-12">Dec 2025</time></span>
       </li>
       <li>
         <span class="title">
           <a href="https://www.cnbc.com/video/2024/04/24/canonical-crypto-founder-says-hes-bullish-on-the-merging-of-ai-and-blockchain.html" target="_blank" rel="noopener">On the merging of AI and blockchain</a>
           <span style="color:var(--muted)"> · CNBC</span>
         </span>
-        <span class="meta">Apr 2024</span>
+        <span class="meta"><time datetime="2024-04">Apr 2024</time></span>
       </li>
     </ul>
   </section>
@@ -215,7 +275,7 @@
 <!-- Tweet rail breaks the reading column. Tweets stay JS-rendered (auto-refresh
      via GH Actions cron); they're enrichment, not entity-defining content. -->
 <section class="wrap wrap--wide" id="recent">
-  <span class="label">Recent on X &nbsp;→&nbsp; <a href="https://x.com/ai">@ai</a></span>
+  <h2 class="label">What is Anand Iyer posting about? &nbsp;→&nbsp; <a href="https://x.com/ai">@ai</a></h2>
   <div class="rail-wrap">
     <div class="rail" id="tweets">
       <!-- rendered from data/tweets.json -->
@@ -226,9 +286,9 @@
 <main class="wrap">
   <!-- ── FAQ (GEO: direct Q→A pairs LLMs cite cleanly) ── -->
   <section id="faq">
-    <span class="label">FAQ</span>
+    <h2 class="label">What do people ask about Anand Iyer?</h2>
     <details>
-      <summary>Who is Anand Iyer?</summary>
+      <summary><h3>Who is Anand Iyer?</h3></summary>
       <p>
         Anand Iyer is Managing Partner of Canonical, an early-stage venture
         firm based in San Francisco, and Venture Partner at Lightspeed Venture
@@ -238,7 +298,7 @@
       </p>
     </details>
     <details>
-      <summary>What is Canonical?</summary>
+      <summary><h3>What is Canonical?</h3></summary>
       <p>
         Canonical is a San Francisco-based early-stage venture firm Anand
         founded in 2022. It invests in university spin-outs and deep-technical
@@ -248,7 +308,7 @@
       </p>
     </details>
     <details>
-      <summary>What was Trusted?</summary>
+      <summary><h3>What was Trusted?</h3></summary>
       <p>
         Trusted was a marketplace for trusted childcare Anand co-founded in
         2014. It was acquired by Care.com (CRCM) in 2018; IAC subsequently
@@ -256,7 +316,7 @@
       </p>
     </details>
     <details>
-      <summary>How do I pitch Canonical?</summary>
+      <summary><h3>How do I pitch Canonical?</h3></summary>
       <p>
         Email <a href="mailto:hello@canonical.cc">hello@canonical.cc</a>. Canonical
         leads at the earliest stages with $500K–$1.5M checks. See the
@@ -310,7 +370,7 @@
 
   <!-- ── Contact ──────────────────────────────────────── -->
   <section id="contact" class="contact">
-    <span class="label">Contact</span>
+    <h2 class="label">How do I contact Anand Iyer?</h2>
     <p>
       For pitches and intros related to Canonical:
       <a href="mailto:hello@canonical.cc">hello@canonical.cc</a>.

@@ -43,6 +43,12 @@ agentic finance and commerce, on-chain coordination, deeptech.
 - [Substack — anandiyer.substack.com](https://anandiyer.substack.com)
 - [RSS feed](https://anandiyer.substack.com/feed)
 
+## Machine-readable
+
+- [Markdown twin of the homepage](https://anandiyer.com/index.md)
+- [Writing feed as JSON](https://anandiyer.com/data/writing.json)
+- [Talks as JSON](https://anandiyer.com/data/talks.json)
+
 ## Optional
 
 - [Recent tweets](https://x.com/ai)

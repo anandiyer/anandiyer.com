@@ -176,6 +176,39 @@ h2 {
   justify-content: space-between;
 }
 
+/* ── Fact table ────────────────────────────────────────── */
+.facts {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+}
+/* Subordinate to the section's .label heading above it — same muted colour,
+   but serif italic so two mono eyebrows don't stack and flatten the hierarchy. */
+.facts caption {
+  text-align: left;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--muted);
+  padding-bottom: 0.5rem;
+}
+.facts th,
+.facts td {
+  text-align: left;
+  vertical-align: baseline;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.facts tr:last-child th,
+.facts tr:last-child td { border-bottom: none; }
+.facts th {
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  padding-right: 1.5rem;
+  width: 1%;
+}
+
 /* ── FAQ (details/summary) ─────────────────────────────── */
 #faq details {
   border-bottom: 1px solid var(--rule);
@@ -191,6 +224,13 @@ h2 {
   align-items: center;
 }
 #faq summary::-webkit-details-marker { display: none; }
+/* The question is an <h3> so crawlers count it as a heading; it must still
+   render exactly like the plain-text summary it replaced. */
+#faq summary h3 {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
 #faq summary::after {
   content: "+";
   font-family: var(--mono);

@@ -88,12 +88,32 @@ def render_html(items: list[dict]) -> str:
         title = html.escape(i["title"])
         url = html.escape(i["url"])
         date = html.escape(i["date"])
+        iso = html.escape(i.get("date_iso") or "")
+        # Machine-readable pubdate. Answer engines score visible dates, but only
+        # a <time datetime> gives them one they can parse unambiguously. Falls
+        # back to a bare span when the RSS pubDate didn't parse.
+        stamp = f'<time datetime="{iso}">{date}</time>' if iso else date
         lines.append(
             f'  <li>\n'
             f'    <span class="title"><a href="{url}" target="_blank" rel="noopener">{title}</a></span>\n'
-            f'    <span class="meta">{date}</span>\n'
+            f'    <span class="meta">{stamp}</span>\n'
             f'  </li>'
         )
+    return "\n".join(lines)
+
+
+def render_markdown(items: list[dict]) -> str:
+    """Render the list rows for the Markdown twin at /index.md.
+
+    The twin is advertised via <link rel="alternate" type="text/markdown">, so
+    it has to track the HTML — a stale twin is worse than no twin.
+    """
+    lines = []
+    for i in items:
+        date = i.get("date_iso") or i["date"]
+        # Escape brackets so a title containing one can't break the link text.
+        title = i["title"].replace("[", r"\[").replace("]", r"\]")
+        lines.append(f'- {date} — [{title}]({i["url"]})')
     return "\n".join(lines)
 
 
@@ -103,13 +123,15 @@ MARKER_RE = re.compile(
 )
 
 
-def patch_html(html_path: pathlib.Path, block: str) -> bool:
+def patch_html(html_path: pathlib.Path, block: str, indent: str = "  ") -> bool:
+    """Replace the marker-delimited block in `html_path`. Works for the
+    Markdown twin too — both files use the same HTML-comment markers."""
     src = html_path.read_text(encoding="utf-8")
     if not MARKER_RE.search(src):
         raise SystemExit(
             f"{html_path}: missing <!-- writing:start --> / <!-- writing:end --> markers"
         )
-    new = MARKER_RE.sub(lambda m: f"{m.group(1)}\n{block}\n  {m.group(3)}", src)
+    new = MARKER_RE.sub(lambda m: f"{m.group(1)}\n{block}\n{indent}{m.group(3)}", src)
     if new == src:
         return False
     html_path.write_text(new, encoding="utf-8")
@@ -122,6 +144,7 @@ def main() -> int:
     p.add_argument("--limit", type=int, default=5)
     p.add_argument("--json-out", default=str(ROOT / "data" / "writing.json"))
     p.add_argument("--html", default=str(ROOT / "index.html"))
+    p.add_argument("--markdown", default=str(ROOT / "index.md"))
     args = p.parse_args()
 
     try:
@@ -145,12 +168,17 @@ def main() -> int:
         f.write("\n")
 
     # 2. Inline HTML
-    block = render_html(items)
-    changed = patch_html(pathlib.Path(args.html), block)
+    changed = patch_html(pathlib.Path(args.html), render_html(items))
+
+    # 3. Markdown twin (/index.md), advertised via rel="alternate"
+    md_changed = patch_html(
+        pathlib.Path(args.markdown), render_markdown(items), indent=""
+    )
 
     print(
         f"wrote {len(items)} posts → {args.json_out}; "
-        f"index.html {'patched' if changed else 'unchanged'}",
+        f"index.html {'patched' if changed else 'unchanged'}; "
+        f"index.md {'patched' if md_changed else 'unchanged'}",
         file=sys.stderr,
     )
     return 0
